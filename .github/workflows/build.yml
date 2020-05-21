@@ -1,0 +1,60 @@
+name: Build
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install theos
+      run: |
+            brew install ldid xz
+            echo "::set-env name=THEOS::$(pwd)/theos"
+            export THEOS=$(pwd)/theos
+            git clone --recursive https://github.com/theos/theos.git $THEOS
+            git clone https://github.com/synackuk/ios-sdks
+            mv ios-sdks/*.sdk $THEOS/sdks/
+    - name: Install image3maker
+      run: |
+          git clone https://github.com/darwin-on-arm/image3maker
+          cd image3maker
+          make
+          sudo mv image3maker /usr/local/bin
+          cd ..
+    - name: install hfsplus
+      run: |
+          brew install cmake openssl
+          git clone https://github.com/planetbeing/libdmg-hfsplus
+          cd libdmg-hfsplus
+          cmake .
+          make
+          cd hfs
+          sudo mv hfsplus /usr/local/bin
+    - name: Build
+      run: |
+        export SDKVERSION=7.1
+        make
+    - name: Upload hyoscine
+      uses: actions/upload-artifact@v2
+      with:
+        name: hyoscine.img3
+        path: hyoscine/hyoscine.img3
+    - name: set build version
+      run: |
+          echo "::set-env name=BUILD_VERSION::$(echo "$(git log -1 --pretty=format:'%H' | cut -c1-8  | tr -d '\n')")"
+          echo "::set-env name=COMMIT_MSG::$(echo "$(git log -1 --pretty=%B)")"
+    - name: Release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: ${{ env.BUILD_VERSION }}
+        prerelease: false
+        title: ${{ env.COMMIT_MSG }}
+        files: |
+          hyoscine/hyoscine.img3
