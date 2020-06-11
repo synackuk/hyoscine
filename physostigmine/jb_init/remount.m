@@ -41,7 +41,7 @@ static uint32_t get_vfs_flags() {
 	if(!vnode_mount) {
 		return 0;
 	}
-	uint32_t vfs_flags = rk32(vnode_mount + KSTRUCT_OFFSET_MOUNT_MNT_FLAG + 1);
+	uint32_t vfs_flags = rk32(vnode_mount + KSTRUCT_OFFSET_MOUNT_MNT_FLAG);
 	return vfs_flags;
 }
 
@@ -50,7 +50,7 @@ static int set_vfs_flags(uint32_t vfs_flags) {
 	if(!vnode_mount) {
 		return -1;
 	}
-	return wk32(vnode_mount + KSTRUCT_OFFSET_MOUNT_MNT_FLAG + 1, vfs_flags);
+	return wk32(vnode_mount + KSTRUCT_OFFSET_MOUNT_MNT_FLAG, vfs_flags);
 }
 
 int do_remount() {
@@ -60,15 +60,17 @@ int do_remount() {
 		printf("Failed to get vfs_flags\n");
 		return -1;
 	}
-	ret = set_vfs_flags(vfs_flags & ~(MNT_ROOTFS >> 8));
+	vfs_flags = vfs_flags & ~MNT_NOSUID;
+	vfs_flags = vfs_flags & ~MNT_RDONLY;
+	ret = set_vfs_flags(vfs_flags & ~MNT_ROOTFS);
 	if(ret != 0) {
 		printf("Failed to set vfs_flags\n");
 		return -1;
 	}
 
-	ret = hfs_mount(strdup("/dev/disk0s1s1"), "/", MNT_UPDATE);
+	ret = hfs_mount(strdup("/dev/disk0s1s1"), "/", MNT_UPDATE | MNT_NOATIME);
 	if(ret != 0) {
-		printf("Failed remount\n");
+		printf("Failed rootfs remount\n");
 		return -1;
 	}
 
@@ -78,5 +80,11 @@ int do_remount() {
 		return -1;
 	}
 
+	ret = hfs_mount(strdup("/dev/disk0s1s2"), "/private/var", MNT_UPDATE | MNT_CPROTECT);
+	if(ret != 0) {
+		printf("Failed userfs remount\n");
+		return -1;
+	}
+	
 	return 0;
 }

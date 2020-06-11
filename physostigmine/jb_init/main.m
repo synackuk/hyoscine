@@ -1,6 +1,5 @@
 #include <launch_daemons.h>
 #include <remount.h>
-#include <sandbox.h>
 #include <kernel.h>
 #include <stdio.h>
 #include <sys/stat.h>
@@ -18,7 +17,6 @@ int main(int argc, char *argv[], char *envp[]) {
 	ret = init_kernel();
 	if(ret != 0) {
 		printf("Failed to initialise kernel\n");
-		execv("/usr/libexec/keybagd_0", argv);
 		return -1;
 	}
 
@@ -27,7 +25,6 @@ int main(int argc, char *argv[], char *envp[]) {
 	ret = do_remount();
 	if(ret != 0) {
 		printf("Failed to remount filesystems\n");
-		execv("/usr/libexec/keybagd_0", argv);
 		return -1;
 	}
 
@@ -37,7 +34,7 @@ int main(int argc, char *argv[], char *envp[]) {
 
 	printf("Done.\n");
 
+
 	close(console);
-	execv("/usr/libexec/keybagd_0", argv);
 	return 0;
 }

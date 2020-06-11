@@ -15,6 +15,7 @@ hyoscine.dmg: launchd/launchd
 	@$(HFSPLUS) hyoscine.dmg add launchd/launchd /sbin/launchd
 	@$(HFSPLUS) hyoscine.dmg chmod 755 /sbin/launchd
 	@$(HFSPLUS) hyoscine.dmg addall modules /modules
+	@$(HFSPLUS) hyoscine.dmg addall files /files
 
 launchd/launchd:
 	@echo Building $(@)

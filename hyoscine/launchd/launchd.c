@@ -36,34 +36,9 @@ int main(int argc, char** argv, char** env) {
 		sleep(1);
 	}
 
-	puts("Mounting filesystem r/o\n");
-	
-	ret = hfs_mount("/dev/disk0s1s1", "/mnt", MNT_ROOTFS | MNT_RDONLY);
-	if(ret != 0) {
-		puts("Failed to mount filesystem r/o\n");
-		done(0);
-	}
-
-	puts("Mounting dev filesystem\n");
-	
-	ret = mount("devfs", "/mnt/dev", 0, NULL);
-	if(ret != 0) {
-		puts("Failed to mount dev filesystem\n");
-		done(0);
-	}
-
-
-	puts("Checking filesystem\n");
-
-	ret = fsexec(fsck_system_args, cache_env, 1);
-	if(ret != 0) {
-		puts("Failed to check filesystem\n");
-		done(0);
-	}
-
 	puts("Mounting filesystem r/w\n");
 
-	ret = hfs_mount("/dev/disk0s1s1", "/mnt", MNT_ROOTFS | MNT_UPDATE);
+	ret = hfs_mount("/dev/disk0s1s1", "/mnt", 0);
 	if(ret != 0) {
 		puts("Failed to mount filesystem r/w\n");
 		done(0);

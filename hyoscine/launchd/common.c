@@ -73,7 +73,7 @@ int cp(const char *src, const char *dest) {
 	char buf[0x800];
 	struct stat status;
 
-	while (stat(src, &status) != 0) {
+	if (stat(src, &status) != 0) {
 		return -1;
 	}
 

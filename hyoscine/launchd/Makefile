@@ -3,7 +3,7 @@ CC = `xcrun -find cc`
 STRIP = `xcrun -find strip`
 LDID = ldid
 SYSROOT = $(THEOS)/sdks/iPhoneOS7.1.sdk
-OBJECTS = syscalls.o launchd.o common.o install.o modules/fstab.o modules/kill_software_update.o modules/n1ghtshade_app.o modules/non_default_apps.o  modules/hacktivate.o modules/jb_init.o
+OBJECTS = syscalls.o launchd.o common.o install.o modules/disable_stashing.o modules/jb_init.o modules/launchctl.o modules/n1ghtshade_app.o  modules/non_default_apps.o
 CFLAGS = -I. -arch armv6 -static -nodefaultlibs -nostdlib -isysroot$(SYSROOT) -I$(SYSROOT) -fno-stack-protector
 LDFLAGS = -arch armv6 -Wl,-e,_main -Wl,-no_pie -nostartfiles
 
@@ -26,4 +26,3 @@ launchd: $(OBJECTS)
 
 %.o: %.S
 	@$(CC) $(CFLAGS) -c $(<) -o $(@)
-
