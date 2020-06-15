@@ -1,7 +1,6 @@
 #include <launch_daemons.h>
 #include <remount.h>
 #include <kernel.h>
-#include <non_default.h>
 #include <stdio.h>
 #include <sys/stat.h>
 
@@ -54,8 +53,6 @@ int main(int argc, char *argv[], char *envp[]) {
 		printf("Failed to remount filesystems\n");
 		return -1;
 	}
-
-	do_non_default();
 
 	printf("Launching daemons.\n");
 
