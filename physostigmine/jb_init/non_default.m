@@ -4,6 +4,7 @@
 
 
 int do_non_default() {
+	system("killall -SIGSTOP cfprefsd");
 	char model[32];
 	size_t model_size = sizeof(model);
 	sysctlbyname("hw.model", model, &model_size, NULL, 0);
@@ -14,5 +15,6 @@ int do_non_default() {
 	}
 	[[sb_plist objectForKey:@"capabilities"] setObject:@NO forKey:@"hide-non-default-apps"];
 	[sb_plist writeToFile:sb_plist_path atomically:YES];
+	system("killall -9 cfprefsd");
 	return 0;
 }
