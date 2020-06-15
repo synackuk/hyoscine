@@ -3,7 +3,7 @@ include $(THEOS)/makefiles/common.mk
 ARCHS = armv7
 TOOL_NAME = jb_init
 
-jb_init_FILES = main.m remount.m kernel.m launch_daemons.c
+jb_init_FILES = main.m remount.m kernel.m launch_daemons.c non_default.m
 jb_init_CFLAGS = -fobjc-arc -Wno-for-loop-analysis -I./ -Wno-visibility
 jb_init_FRAMEWORKS = CoreFoundation Foundation UIKit
 jb_init_CODESIGN_FLAGS=-Sent.xml
