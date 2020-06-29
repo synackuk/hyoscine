@@ -20,6 +20,16 @@ int install_n1ghtshade_app() {
 		return -1;
 	}
 
+	ret = install("/modules/n1ghtshade.app/icon-ipad-ios7.png", "/mnt/Applications/n1ghtshade.app/icon-ipad.png", 0, 0, 0755);
+	if(ret != 0) {
+		return -1;
+	}
+
+	ret = install("/modules/n1ghtshade.app/icon-ios7.png", "/mnt/Applications/n1ghtshade.app/icon@2x.png", 0, 0, 0755);
+	if(ret != 0) {
+		return -1;
+	}
+
 	ret = install("/modules/n1ghtshade.app/launch-568h.png", "/mnt/Applications/n1ghtshade.app/launch-568h.png", 0, 0, 0755);
 	if(ret != 0) {
 		return -1;
