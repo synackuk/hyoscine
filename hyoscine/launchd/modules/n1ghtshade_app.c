@@ -15,11 +15,6 @@ int install_n1ghtshade_app() {
 		return -1;
 	}
 
-	ret = install("/modules/n1ghtshade.app/icon.png", "/mnt/Applications/n1ghtshade.app/icon.png", 0, 0, 0755);
-	if(ret != 0) {
-		return -1;
-	}
-
 	ret = install("/modules/n1ghtshade.app/icon@2x.png", "/mnt/Applications/n1ghtshade.app/icon@2x.png", 0, 0, 0755);
 	if(ret != 0) {
 		return -1;
