@@ -10,7 +10,6 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>icon</string>
 				<string>icon@2x</string>
 				<string>icon-ios7</string>
 			</array>
